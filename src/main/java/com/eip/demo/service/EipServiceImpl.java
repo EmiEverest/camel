@@ -78,10 +78,11 @@ public class EipServiceImpl implements EipService {
 		return productMapper.productsToProductDTOs(splitterRouteDefinition.getProducts());
 	}
 
+
+	
 	@Override
-	public void execuiteEipAggregatePattern(String destination, List<Order> orders) {
-		// TODO Auto-generated method stub
-		producerTemplate.sendBody(destination, orders);
+	public	void insertAndTriggerEipSplittedProduct(List<Product> products) throws JsonProcessingException{
+		kafkaService.insertListProductInTopic(products);
 		 try {
 			// Aspetta qualche secondo per vedere il risultato nei log
 				Thread.sleep(5000);
@@ -93,20 +94,14 @@ public class EipServiceImpl implements EipService {
 	}
 	
 	@Override
-	public	List<ProductDTO> executeEipSplittedProduct(List<Product> products) throws JsonProcessingException{
-		kafkaService.insertListProductInTopic(products);
-		 try {
-			// Aspetta qualche secondo per vedere il risultato nei log
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		return productMapper.productsToProductDTOs(splitterRouteKafka.getProducts());
+	public List<ProductDTO> fetchSplittedProducts()
+	{
+
+		return productMapper.productsToProductDTOs(splitterRouteKafka.getProducts());		
 	}
 	
 	@Override
-	public	String executeEipAggregateProduct(Product product) throws JsonProcessingException{
+	public	void insertAndTriggerEipAggregateProduct(Product product) throws JsonProcessingException{
 		kafkaService.insertProductInTopic(product,this.product_topic);
 		 try {
 			// Aspetta qualche secondo per vedere il risultato nei log
@@ -115,11 +110,16 @@ public class EipServiceImpl implements EipService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+	}
+	
+	@Override
+	public String fetchAggregateProducts() {
 		return aggregateRouteDefinition.getAggregateOrders();
 	}
 	
 	@Override
-	public	String executeEipContedBaseProduct(Product product) throws JsonProcessingException{
+	public	void insertAndTriggerEipContedBaseProduct(Product product) throws JsonProcessingException{
 		kafkaService.insertProductInTopic(product,product_conted_based_topic);
 		 try {
 			// Aspetta qualche secondo per vedere il risultato nei log
@@ -128,11 +128,16 @@ public class EipServiceImpl implements EipService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+	}
+	
+	@Override
+	public String fetchSelectedRoute() {
 		return contentBasedRouterDefinition.getSelectedRoute();
 	}
 	
 	@Override
-	public	String executeEipRecipientListProduct(Post post) throws JsonProcessingException{
+	public	void insertAndTriggerEipRecipientListProduct(Post post) throws JsonProcessingException{
 		kafkaService.insertPostInTopic(post,post_topic);
 		 try {
 			// Aspetta qualche secondo per vedere il risultato nei log
@@ -141,6 +146,11 @@ public class EipServiceImpl implements EipService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+	}
+	
+	@Override
+	public String fetchRecipientList() {
 		return recipientListDefinition.getSendMessage();
 	}
 	

@@ -46,25 +46,27 @@ public class EipRestController {
 		
 
 //		kafkaService.insertProductInTopic(product,product_topic);
-		String aggregateOrders = eipService.executeEipAggregateProduct(product);
-		return new ResponseEntity<>(aggregateOrders, HttpStatus.OK);
+		 eipService.insertAndTriggerEipAggregateProduct(product);
+		 String fetchAggregateProducts = eipService.fetchAggregateProducts();
+		 return new ResponseEntity<>(fetchAggregateProducts, HttpStatus.OK);
 	}
 	
 	@PostMapping("/split-products")
 	public ResponseEntity<List<ProductDTO>> startSplit(@RequestBody List<Product> products) throws JsonProcessingException {
-		List<ProductDTO> executeEipSplittedProduct = eipService.executeEipSplittedProduct(products);
-
+		 eipService.insertAndTriggerEipSplittedProduct(products);
+		 List<ProductDTO> fetchSplittedProducts = eipService.fetchSplittedProducts();
 //		kafkaService.insertListProductInTopic(products);
 //		List<Product> result=new ArrayList<>();
 //		result=products;
 //		List<String> aggregateOrders = eipService.fetchAggregateOrders();
-		return new ResponseEntity<>(executeEipSplittedProduct, HttpStatus.OK);
+		return new ResponseEntity<>(fetchSplittedProducts, HttpStatus.OK);
 	}
 	
 	@PostMapping("/content-based-products")
 	public ResponseEntity<String> startContentBased(@RequestBody Product product) throws JsonProcessingException {
-		String executeEipContedBaseProduct = eipService.executeEipContedBaseProduct(product);
-		return new ResponseEntity<>(executeEipContedBaseProduct, HttpStatus.OK);
+		 eipService.insertAndTriggerEipContedBaseProduct(product);
+		 String fetchSelectedRoute = eipService.fetchSelectedRoute();
+		 return new ResponseEntity<>(fetchSelectedRoute, HttpStatus.OK);
 
 //		kafkaService.insertProductInTopic(product,product_conted_based_topic);
 //		List<String> aggregateOrders = eipService.fetchAggregateOrders();
@@ -72,10 +74,11 @@ public class EipRestController {
 	}
 	
 	@PostMapping("/recipient-list-post")
-	public ResponseEntity<String> startContentBased(@RequestBody Post post) throws JsonProcessingException {
+	public ResponseEntity<String> startRecipientList(@RequestBody Post post) throws JsonProcessingException {
 		
-		String executeEipRecipientListProduct = eipService.executeEipRecipientListProduct(post);
-		return new ResponseEntity<>(executeEipRecipientListProduct, HttpStatus.OK);
+		 eipService.insertAndTriggerEipRecipientListProduct(post);
+		String fetchRecipientList = eipService.fetchRecipientList();
+		 return new ResponseEntity<>(fetchRecipientList, HttpStatus.OK);
 //		kafkaService.insertPostInTopic(post,post_topic);
 //		List<String> aggregateOrders = eipService.fetchAggregateOrders();
 //		return new ResponseEntity<>(aggregateOrders, HttpStatus.OK);

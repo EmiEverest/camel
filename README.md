@@ -34,3 +34,5 @@ services:
       /usr/bin/kafka-topics --create --topic  aggregated-products --bootstrap-server localhost:29092 --partitions 1  --replication-factor 1
 
       Le chiamate in post vanno a scrivere sulle code, e successivamente intervengono specifici component di Camel implentanti gli EIP 
+      
+Ogni Classe implementante  EIP  ha una variabile d'istanza che tiene traccia del risultato dell'operazione.

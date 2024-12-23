@@ -13,17 +13,25 @@ public interface EipService {
 	Order fetchOrder(List<Product> l);
 
 	void execuiteEipPattern(String destination, Order order) ;
-	void execuiteEipAggregatePattern(String destination,List<Order> orders) ;
+	
 	List<ProductDTO> fetchSplittedProduct();
 
 
-	List<ProductDTO> executeEipSplittedProduct(List<Product> products) throws JsonProcessingException;
+	void insertAndTriggerEipSplittedProduct(List<Product> products) throws JsonProcessingException;
 
-	String executeEipAggregateProduct(Product product) throws JsonProcessingException;
+	void insertAndTriggerEipAggregateProduct(Product product) throws JsonProcessingException;
 
-	String executeEipContedBaseProduct(Product product) throws JsonProcessingException;
+	void insertAndTriggerEipContedBaseProduct(Product product) throws JsonProcessingException;
 
-	String executeEipRecipientListProduct(Post post) throws JsonProcessingException;
+	void insertAndTriggerEipRecipientListProduct(Post post) throws JsonProcessingException;
+
+	List<ProductDTO> fetchSplittedProducts();
+
+	String fetchSelectedRoute();
+
+	String fetchRecipientList();
+
+	String fetchAggregateProducts();
 	
 
 }
